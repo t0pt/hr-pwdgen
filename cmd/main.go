@@ -35,7 +35,7 @@ func main() {
 		return
 	}
 
-	file, err := os.Open("words_alpha.txt")
+	file, err := os.Open("words.txt")
 	if err != nil {
 		fmt.Println("An error occured, trying to access the list of the available words")
 		return
@@ -46,16 +46,14 @@ func main() {
 		return
 	}
 	all_words := string(bts)
-	words := strings.Split(all_words, "\n")
+	words := strings.Split(all_words, " ")
 
 	rand.Seed(time.Now().UnixNano())
 	var foundWords []string = []string{}
 	for i := 0; i < wordCount; i += 1 {
 		new_word := words[rand.Intn(len(words))]
-		fmt.Println(new_word)
 		foundWords = append(foundWords, new_word)
 	}
-	fmt.Println("Words list:", foundWords)
 	fmt.Println(strings.Join(foundWords, "."))
 }
 
