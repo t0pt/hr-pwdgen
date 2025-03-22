@@ -47,18 +47,36 @@ func main() {
 	}
 	all_words := string(bts)
 	words := strings.Split(all_words, " ")
+	file, err = os.Open("characters.txt")
+	if err != nil {
+		fmt.Println("An error occured, trying to access the list of the available words")
+		return
+	}
+	bts, err = io.ReadAll(file)
+	if err != nil {
+		fmt.Println("An error occured, trying to read the list of the available words")
+		return
+	}
+	all_chars := string(bts)
+	chars := strings.Split(all_chars, "")
 
 	rand.Seed(time.Now().UnixNano())
-	var foundWords []string = []string{}
+	var chosenWords []string = []string{}
 	for i := 0; i < wordCount; i += 1 {
 		new_word := words[rand.Intn(len(words))]
-		foundWords = append(foundWords, new_word)
+		chosenWords = append(chosenWords, new_word)
 	}
-	fmt.Println(strings.Join(foundWords, "."))
+	output := chosenWords[0]
+	for i := 1; i < len(chosenWords)-1; i++ {
+		new_con := chars[rand.Intn(len(chars))]
+		output += new_con
+		output += chosenWords[i]
+	}
+	fmt.Println(output)
 }
 
 var availableSizes map[string]int = map[string]int{
-	"xs": 3, "s": 5, "m": 7, "l": 10, "xl": 15,
+	"xs": 2, "s": 3, "m": 5, "l": 7, "xl": 15,
 }
 
 var sizeTable string = fmt.Sprintf(`    xs - %d words + random spacers
