@@ -9,14 +9,19 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"unicode"
 )
 
 func main() {
-	help := flag.Bool("h", false, "help")
+	help := flag.Bool("help", false, "help")
 	size := flag.String("s", "m", "size of the password (m by default)")
 	sc := flag.Bool("sc", false, "disable special special characters (enabled by default)")
+	f := flag.Bool("f", false, "fancyfy the words (change some a's to @, some o's to 0 and some i's to 1) (enabled by default)")
+	c := flag.Bool("c", false, "capialize some letters in words (disabled by default)")
+	hotness := flag.Int("hotness", 5, "probability that the character will be fancifyed: 10:n , where n is the passed number (defaults to 5, so it's 2:1 probability)")
 	flag.Parse()
 	*sc = !*sc
+	*f = !*f
 
 	if *help {
 		fmt.Println(helpMessage)
@@ -64,8 +69,12 @@ func main() {
 	var chosenWords []string = []string{}
 	for i := 0; i < wordCount; i += 1 {
 		new_word := words[rand.Intn(len(words))]
-		if rand.Intn(2) == 0 && *sc {
-			new_word = SpecialCharsString(new_word)
+		new_word = CapitalizeFirst(new_word)
+		if rand.Intn(10+*hotness) < *hotness && *c {
+			new_word = CapitalizeSome(new_word, *hotness)
+		}
+		if rand.Intn(10+*hotness) < *hotness && *f {
+			new_word = SpecialCharsString(new_word, *hotness)
 		}
 		chosenWords = append(chosenWords, new_word)
 	}
@@ -74,7 +83,7 @@ func main() {
 	for i := 1; i < len(chosenWords); i++ {
 		new_con := ""
 		if rand.Intn(2) == 0 || !*sc {
-			new_con = strconv.Itoa(rand.Intn(1000))
+			new_con = strconv.Itoa(rand.Intn(100))
 		} else {
 			new_con = chars[rand.Intn(len(chars))]
 		}
@@ -84,26 +93,43 @@ func main() {
 	fmt.Println(output)
 }
 
-func SpecialCharsString(s string) string {
+func SpecialCharsString(s string, h int) string {
 	output := ""
 	for _, run := range s {
 		switch run {
 		case 'a':
-			if rand.Intn(2) == 0 {
+			if rand.Intn(10+h) < h {
 				run = '@'
 			}
 		case 'o':
-			if rand.Intn(2) == 0 {
+			if rand.Intn(10+h) < h {
 				run = '0'
 			}
 		case 'i':
-			if rand.Intn(2) == 0 {
+			if rand.Intn(10+h) < h {
 				run = '1'
 			}
 		}
 		output += string(run)
 	}
 	return output
+}
+
+func CapitalizeSome(s string, h int) string {
+	output := ""
+	for _, run := range s {
+		if rand.Intn(10+h) < h {
+			run = unicode.ToUpper(run)
+		}
+		output += string(run)
+	}
+	return output
+}
+
+func CapitalizeFirst(s string) string {
+	r := []rune(s)
+	r[0] = unicode.ToUpper(r[0])
+	return string(r)
 }
 
 var availableSizes map[string]int = map[string]int{
@@ -118,11 +144,12 @@ var sizeTable string = fmt.Sprintf(`    xs - %d words + random spacers
 	availableSizes["m"], availableSizes["l"], availableSizes["xl"])
 
 var helpMessage string = fmt.Sprintf(`Usage:
-  -h    help
-  -s string
-        size of the password (default "m")
-  -sc
-        disable special special charecters (enabled by default)
+  -help         help
+  -s            size of the password (m by default) (default "m")
+  -sc           disable special special characters (enabled by default)
+  -f            fancyfy the words (change some a's to @, some o's to 0 and some i's to 1) (enabled by default)
+  -c            capialize some letters in words (disabled by default)
+  -hotness      probability that the character will be fancifyed: 10:n , where n is the passed number (defaults to 5, so it's 2:1 probability)
 
-Size table:
+Password size table:
 %s`, sizeTable)
