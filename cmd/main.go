@@ -64,6 +64,9 @@ func main() {
 	var chosenWords []string = []string{}
 	for i := 0; i < wordCount; i += 1 {
 		new_word := words[rand.Intn(len(words))]
+		if rand.Intn(2) == 0 && *sc {
+			new_word = SpecialCharsString(new_word)
+		}
 		chosenWords = append(chosenWords, new_word)
 	}
 	output := chosenWords[0]
@@ -79,6 +82,28 @@ func main() {
 		output += chosenWords[i]
 	}
 	fmt.Println(output)
+}
+
+func SpecialCharsString(s string) string {
+	output := ""
+	for _, run := range s {
+		switch run {
+		case 'a':
+			if rand.Intn(2) == 0 {
+				run = '@'
+			}
+		case 'o':
+			if rand.Intn(2) == 0 {
+				run = '0'
+			}
+		case 'i':
+			if rand.Intn(2) == 0 {
+				run = '1'
+			}
+		}
+		output += string(run)
+	}
+	return output
 }
 
 var availableSizes map[string]int = map[string]int{
