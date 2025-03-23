@@ -6,6 +6,7 @@ import (
 	"io"
 	"math/rand"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -34,7 +35,6 @@ func main() {
 		fmt.Println(sizeTable)
 		return
 	}
-
 	file, err := os.Open("words.txt")
 	if err != nil {
 		fmt.Println("An error occured, trying to access the list of the available words")
@@ -67,8 +67,14 @@ func main() {
 		chosenWords = append(chosenWords, new_word)
 	}
 	output := chosenWords[0]
-	for i := 1; i < len(chosenWords)-1; i++ {
-		new_con := chars[rand.Intn(len(chars))]
+	// stick the words together
+	for i := 1; i < len(chosenWords); i++ {
+		new_con := ""
+		if rand.Intn(2) == 0 || !*sc {
+			new_con = strconv.Itoa(rand.Intn(1000))
+		} else {
+			new_con = chars[rand.Intn(len(chars))]
+		}
 		output += new_con
 		output += chosenWords[i]
 	}
