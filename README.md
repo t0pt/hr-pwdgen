@@ -10,8 +10,8 @@ Also you have the hotness scale to decide, how often it should alter the charact
 <h2>Installation</h2>
 <h3>Linux</h3>
 1. Clone this repo <br>
-2. Run: <code>sudo dpkg -i hr-pwdgen_0.1.deb</code> to install
-3. Then you should be ready to call it 
+2. Run: <code>sudo dpkg -i hr-pwdgen_0.1.deb</code> to install <br>
+3. Then you should be ready to call it like: <code>hr-pwdgen</code>
 
 <h3>Windows</h3>
 1. Clone this repo <br>
