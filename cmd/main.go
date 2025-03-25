@@ -40,7 +40,7 @@ func main() {
 		fmt.Println(sizeTable)
 		return
 	}
-	file, err := os.Open("words.txt")
+	file, err := os.Open("/etc/hr-pwdgen/words.txt")
 	if err != nil {
 		fmt.Println("An error occured, trying to access the list of the available words")
 		return
@@ -52,7 +52,7 @@ func main() {
 	}
 	all_words := string(bts)
 	words := strings.Split(all_words, " ")
-	file, err = os.Open("characters.txt")
+	file, err = os.Open("/etc/hr-pwdgen/characters.txt")
 	if err != nil {
 		fmt.Println("An error occured, trying to access the list of the available words")
 		return
