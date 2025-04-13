@@ -1,4 +1,4 @@
-***Human readable password generator***
+<h1>Human readable password generator</h1>
 
 So, I had a problem with creating some passwords, that I could actually remember, without any need for the third party password-keeping software. Here I just have a list of about 300k words that can be combined with each other and result with a password. Also between the words some special characters and/or numbers will be put. Thanks to the kaggle.com/bwandowando for the words dataset!
 
