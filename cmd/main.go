@@ -42,8 +42,11 @@ func main() {
 	}
 	file, err := os.Open("/etc/hr-pwdgen/words.txt")
 	if err != nil {
-		fmt.Println("An error occured, trying to access the list of the available words")
-		return
+		file, err = os.Open("words.txt")
+		if err != nil {
+			fmt.Println("An error occured, trying to access the list of the available words")
+			return
+		}
 	}
 	bts, err := io.ReadAll(file)
 	if err != nil {
@@ -54,12 +57,15 @@ func main() {
 	words := strings.Split(all_words, " ")
 	file, err = os.Open("/etc/hr-pwdgen/characters.txt")
 	if err != nil {
-		fmt.Println("An error occured, trying to access the list of the available words")
-		return
+		file, err = os.Open("characters.txt")
+		if err != nil {
+			fmt.Println("An error occured, trying to access the list of the available characters")
+			return
+		}
 	}
 	bts, err = io.ReadAll(file)
 	if err != nil {
-		fmt.Println("An error occured, trying to read the list of the available words")
+		fmt.Println("An error occured, trying to read the list of the available characters")
 		return
 	}
 	all_chars := string(bts)
